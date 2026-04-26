@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sessie's Study Timetable</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6ec;
+    --ink: #1a1209;
+    --warm: #c97b3a;
+    --gold: #e8a84c;
+    --sage: #6b8f71;
+    --dusty: #9b7fa6;
+    --coral: #c4614a;
+    --sky: #5b8fa8;
+    --paper: #f5ead8;
+    --shadow: rgba(90,55,15,0.12);
+  }
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background-color: var(–cream);
+background-image:
+radial-gradient(ellipse at 80% 10%, rgba(232,168,76,0.13) 0%, transparent 60%),
+radial-gradient(ellipse at 10% 90%, rgba(107,143,113,0.10) 0%, transparent 50%);
+font-family: ‘DM Sans’, sans-serif;
+color: var(–ink);
+min-height: 100vh;
+padding: 2rem 1rem 4rem;
+}
+
+header {
+text-align: center;
+padding: 2.5rem 1rem 1.5rem;
+position: relative;
+}
+
+header::before {
+content: ‘’;
+display: block;
+width: 60px;
+height: 3px;
+background: var(–gold);
+margin: 0 auto 1rem;
+border-radius: 2px;
+}
+
+header h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(2rem, 6vw, 3.4rem);
+font-weight: 900;
+letter-spacing: -0.02em;
+color: var(–ink);
+line-height: 1.1;
+}
+
+header h1 span {
+color: var(–warm);
+}
+
+header p {
+margin-top: 0.6rem;
+font-size: 0.9rem;
+font-weight: 300;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: #7a6048;
+}
+
+header::after {
+content: ‘’;
+display: block;
+width: 40px;
+height: 3px;
+background: var(–gold);
+margin: 1rem auto 0;
+border-radius: 2px;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 1.4rem;
+max-width: 1200px;
+margin: 2.5rem auto 0;
+}
+
+.day-card {
+background: var(–paper);
+border-radius: 16px;
+padding: 1.5rem 1.4rem 1.6rem;
+box-shadow: 0 4px 24px var(–shadow), 0 1px 3px rgba(0,0,0,0.05);
+position: relative;
+overflow: hidden;
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+animation: fadeUp 0.5s ease both;
+}
+
+.day-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 12px 36px var(–shadow);
+}
+
+.day-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 5px;
+border-radius: 16px 16px 0 0;
+}
+
+.day-card.mon::before { background: linear-gradient(90deg, var(–sage), #a8d5b0); }
+.day-card.tue::before { background: linear-gradient(90deg, var(–sky), #a0c8de); }
+.day-card.wed::before { background: linear-gradient(90deg, var(–dusty), #c9b8d8); }
+.day-card.thu::before { background: linear-gradient(90deg, var(–warm), #e8c08a); }
+.day-card.fri::before { background: linear-gradient(90deg, var(–coral), #e8a090); }
+.day-card.sat::before { background: linear-gradient(90deg, var(–gold), #f5d080); }
+
+.day-card:nth-child(1) { animation-delay: 0.05s; }
+.day-card:nth-child(2) { animation-delay: 0.10s; }
+.day-card:nth-child(3) { animation-delay: 0.15s; }
+.day-card:nth-child(4) { animation-delay: 0.20s; }
+.day-card:nth-child(5) { animation-delay: 0.25s; }
+.day-card:nth-child(6) { animation-delay: 0.30s; }
+
+.day-label {
+font-family: ‘Playfair Display’, serif;
+font-size: 1.35rem;
+font-weight: 700;
+margin-bottom: 1.1rem;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+
+.day-label .dot {
+width: 10px; height: 10px;
+border-radius: 50%;
+display: inline-block;
+flex-shrink: 0;
+}
+
+.mon .dot { background: var(–sage); }
+.tue .dot { background: var(–sky); }
+.wed .dot { background: var(–dusty); }
+.thu .dot { background: var(–warm); }
+.fri .dot { background: var(–coral); }
+.sat .dot { background: var(–gold); }
+
+.session {
+display: flex;
+gap: 0.75rem;
+align-items: flex-start;
+padding: 0.55rem 0;
+border-bottom: 1px dashed rgba(90,55,15,0.13);
+}
+
+.session:last-child { border-bottom: none; }
+
+.time {
+font-size: 0.72rem;
+font-weight: 500;
+letter-spacing: 0.03em;
+color: #8a6a44;
+white-space: nowrap;
+min-width: 100px;
+padding-top: 2px;
+line-height: 1.4;
+}
+
+.subject {
+font-size: 0.88rem;
+font-weight: 400;
+color: var(–ink);
+line-height: 1.45;
+}
+
+.subject.break {
+font-style: italic;
+color: #9a8060;
+font-size: 0.82rem;
+}
+
+.subject.review {
+font-weight: 500;
+color: var(–warm);
+}
+
+.note-block {
+margin-top: 0.9rem;
+background: rgba(232,168,76,0.12);
+border-left: 3px solid var(–gold);
+border-radius: 0 8px 8px 0;
+padding: 0.6rem 0.8rem;
+font-size: 0.82rem;
+color: #6a4a20;
+font-style: italic;
+line-height: 1.5;
+}
+
+.badge {
+display: inline-block;
+font-size: 0.65rem;
+background: rgba(90,55,15,0.08);
+color: #7a5a30;
+border-radius: 20px;
+padding: 1px 7px;
+margin-left: 4px;
+vertical-align: middle;
+font-weight: 500;
+letter-spacing: 0.03em;
+}
+
+footer {
+text-align: center;
+margin-top: 3rem;
+font-size: 0.78rem;
+color: #b09070;
+letter-spacing: 0.08em;
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 500px) {
+.time { min-width: 85px; font-size: 0.67rem; }
+.subject { font-size: 0.83rem; }
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  <h1>Sessie's <span>Study</span> Timetable</h1>
+  <p>Personal Study Schedule · Weekly Plan</p>
+</header>
+
+<div class="grid">
+
+  <!-- MONDAY -->
+
+  <div class="day-card mon">
+    <div class="day-label"><span class="dot"></span>Monday</div>
+
+```
+<div class="session">
+  <div class="time">8:00 – 9:30 am</div>
+  <div class="subject">Math <span class="badge">15 min break at 9:30</span></div>
+</div>
+<div class="session">
+  <div class="time">9:45 – 11:00 am</div>
+  <div class="subject">English <span class="badge">15 min break at 11:00</span></div>
+</div>
+<div class="session">
+  <div class="time">11:15 am – 12:15 pm</div>
+  <div class="subject">Social Studies</div>
+</div>
+<div class="session">
+  <div class="time">12:15 – 1:15 pm</div>
+  <div class="subject break">🍽 Lunch Break</div>
+</div>
+<div class="session">
+  <div class="time">1:15 – 3:30 pm</div>
+  <div class="subject review">Review & Catch Up</div>
+</div>
+```
+
+  </div>
+
+  <!-- TUESDAY -->
+
+  <div class="day-card tue">
+    <div class="day-label"><span class="dot"></span>Tuesday</div>
+
+```
+<div class="session">
+  <div class="time">8:00 – 9:30 am</div>
+  <div class="subject">Elective Math <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">9:45 – 11:00 am</div>
+  <div class="subject">Science <span class="badge">15 min break at 11:00</span></div>
+</div>
+<div class="session">
+  <div class="time">11:15 am – 12:15 pm</div>
+  <div class="subject">Social Studies</div>
+</div>
+<div class="session">
+  <div class="time">12:15 – 1:15 pm</div>
+  <div class="subject break">🍽 Lunch Break</div>
+</div>
+<div class="session">
+  <div class="time">1:15 – 3:30 pm</div>
+  <div class="subject review">Review & Catch Up</div>
+</div>
+```
+
+  </div>
+
+  <!-- WEDNESDAY -->
+
+  <div class="day-card wed">
+    <div class="day-label"><span class="dot"></span>Wednesday</div>
+
+```
+<div class="session">
+  <div class="time">8:00 – 9:30 am</div>
+  <div class="subject">Human Geography <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">9:45 – 11:00 am</div>
+  <div class="subject">Science <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">11:15 am – 12:15 pm</div>
+  <div class="subject">Economics</div>
+</div>
+<div class="session">
+  <div class="time">12:15 – 1:15 pm</div>
+  <div class="subject break">🍽 Lunch Break</div>
+</div>
+<div class="session">
+  <div class="time">1:15 – 3:30 pm</div>
+  <div class="subject review">Review & Catch Up</div>
+</div>
+```
+
+  </div>
+
+  <!-- THURSDAY -->
+
+  <div class="day-card thu">
+    <div class="day-label"><span class="dot"></span>Thursday</div>
+
+```
+<div class="session">
+  <div class="time">8:00 – 9:30 am</div>
+  <div class="subject">English <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">9:45 – 11:00 am</div>
+  <div class="subject">Science</div>
+</div>
+<div class="session">
+  <div class="time">11:15 am – 12:15 pm</div>
+  <div class="subject">Social Studies</div>
+</div>
+<div class="session">
+  <div class="time">12:15 – 1:15 pm</div>
+  <div class="subject break">🍽 Lunch Break</div>
+</div>
+<div class="session">
+  <div class="time">1:15 – 3:30 pm</div>
+  <div class="subject review">Review & Catch Up</div>
+</div>
+```
+
+  </div>
+
+  <!-- FRIDAY -->
+
+  <div class="day-card fri">
+    <div class="day-label"><span class="dot"></span>Friday</div>
+
+```
+<div class="session">
+  <div class="time">8:00 – 9:30 am</div>
+  <div class="subject">Elective Math <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">9:45 – 11:00 am</div>
+  <div class="subject">Physical Geography <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">11:15 am – 12:15 pm</div>
+  <div class="subject">Economics</div>
+</div>
+<div class="session">
+  <div class="time">12:15 – 1:15 pm</div>
+  <div class="subject break">🍽 Lunch Break</div>
+</div>
+<div class="session">
+  <div class="time">1:15 – 3:30 pm</div>
+  <div class="subject review">Review & Catch Up</div>
+</div>
+```
+
+  </div>
+
+  <!-- SATURDAY -->
+
+  <div class="day-card sat">
+    <div class="day-label"><span class="dot"></span>Saturday</div>
+
+```
+<div class="session">
+  <div class="time">8:00 – 8:45 am</div>
+  <div class="subject">Science <span class="badge">15 min break</span></div>
+</div>
+<div class="session">
+  <div class="time">9:00 – 10:00 am</div>
+  <div class="subject">Practical Geography</div>
+</div>
+
+<div class="note-block">
+  📝 Review all subjects, focus on challenging topics — and make sure you do Math!
+</div>
+```
+
+  </div>
+
+</div>
+
+<footer>Keep going, Sessie — you've got this! ✨</footer>
+
+</body>
+</html>
